@@ -6,7 +6,7 @@ library(collapse)
 library(countrycode)
 library(giscoR)
 
-setwd("C:/Users/nsuar/Dropbox/asset-ownership/data/DHS")
+setwd("data/DHS")
 
 #checking for raw data
 raw=unique((substr(list.files(),3,4)))
@@ -20,7 +20,7 @@ ctr_list=unique((substr(list.files(),1,2)))
 ctr_list=ctr_list[! ctr_list %in% c("DH","GP")]
 
 
-#looping over countries to make 
+#looping over countries to detect files
 for (ctr in ctr_list) {
   print(paste("Country:",ctr))
   #finding all files for this country
@@ -92,7 +92,7 @@ full_dataset=full_dataset %>% mutate(ctr=substr(DHSID,1,2))
 full_dataset=full_dataset %>% mutate(year=as.integer(substr(DHSID,3,6)))
 full_dataset$ctr_name=countrycode(full_dataset$ctr,origin="dhs",destination="country.name")
 
-write.csv(full_dataset,"../processed/ground_truth.csv", row.names = FALSE)
+write.csv(full_dataset,"processed/ground_truth.csv", row.names = FALSE)
 
 
 full_dataset=full_dataset[full_dataset$year>2013,]
@@ -104,7 +104,7 @@ africa_simple <- gisco_get_countries(region = "Africa", resolution = "20") %>% s
 africa_simple$area=as.vector(st_area(africa_simple$geometry))/(10000000000)
 
 graphics.off()
-pdf(file="C:/Users/nsuar/Dropbox/asset-ownership/data/map_dhs.pdf")
+pdf(file="map_dhs.pdf")
 
 ggplot(africa_simple) +
   geom_sf(fill=NA) +
