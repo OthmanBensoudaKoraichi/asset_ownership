@@ -71,6 +71,7 @@ def train_model_epoch(model,optimizer,loss_fun,data_aug,train_data,printing=Fals
     '''  
     #training loop
     batch_loss=0
+    model.train()
     for X,y in train_data:
         #sending data to device
         X_batch=data_aug(X).to('cuda')
@@ -116,6 +117,7 @@ def validation_loop(model,loss_fun,val_data,printing=False):
     '''      
     #validation loop
     val_loss=0
+    model.eval()
     with torch.no_grad():
         for X,y in val_data:
             #sending data to device
@@ -295,3 +297,46 @@ def experiment_store(experiment,path_results,path_train,path_val):
     #writing again pd dataframe as CSV file
     results2.to_csv(path_train,index=False)
     results3.to_csv(path_val,index=False)
+    
+    
+    
+def test_set_rmse_and_save(model,loss_fun,test_set,params_path,test_set_in_path,test_set_out_path):
+    '''
+    Computing final RMSE in the test set for our best model. We also compute
+    predictions on the test set, and store on a CSV file (to be used to visualize
+    final predictions)
+    inputs:
+        -model: resnet model corresponding to our best experiment
+        -loss_fun: loss function
+        -test_set: a dataset subset to be passed to our dataloader
+        -params_path: path to our saved parameters (in .pt format)
+        -test_set_in_path: path to CSV file containing our test set original data
+        -test_set_out_path: path to CSV file to contain our original test set data,
+                            but now with a row for our predictions
+    '''
+    #test set dataloader
+    test_data= DataLoader( test_set , len(test_set), shuffle = False)
+    
+    #loading parameters    
+    model.load_state_dict(torch.load(params_path))
+    
+    #making predictions and computing RMSE 
+    model.eval()
+    with torch.no_grad():
+        for X,y in test_data:
+            #sending data to device
+            X_batch=X.to('cuda')
+            y_batch=y.to('cuda')
+                    
+            pred = model(X_batch)
+            loss = torch.sqrt(loss_fun(pred, y_batch))
+
+    #reading CSV as pandas
+    test_set_df=pd.read_csv(test_set_in_path)  
+    #storing test set predictions in our test set dataframe
+    test_set_df["pred"]=pred.cpu().numpy()
+    #saving pandas as CSV
+    test_set_df.to_csv(test_set_out_path,index=False)
+    
+    
+    return loss.item()
