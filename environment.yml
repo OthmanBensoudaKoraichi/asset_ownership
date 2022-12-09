@@ -1,0 +1,18 @@
+name: asset_ownership
+channels:
+  - defaults
+dependencies:
+  - pytorch=1.13.0
+  - pytorch-cuda=11.7
+  - torch=1.13.0
+  - torchvision=0.14.0
+  - pandas=1.5.1
+  - numpy=1.21.6
+  - imageio=2.22.0
+  - geetools=0.6.14
+  - requests=2.28.1
+  - earthengine-api=0.1.328
+  - python=3.9.13
+  - pip=22.3
+  - scikit-learn=1.0.2
+  
