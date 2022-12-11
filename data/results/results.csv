@@ -1,0 +1,103 @@
+exp_number,train_batch_size,val_batch_size,data_aug,num_epochs,best_rmse,frozen
+1,500,1243,"Compose(
+)",100,1.409455776,0
+2,500,1243,"Compose(
+    RandomVerticalFlip(p=0.4)
+    RandomHorizontalFlip(p=0.4)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.134327412,0
+3,500,1243,"Compose(
+    RandomVerticalFlip(p=0.4)
+    RandomHorizontalFlip(p=0.4)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.252879739,1
+4,500,1243,"Compose(
+    RandomVerticalFlip(p=0.4)
+    RandomHorizontalFlip(p=0.4)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.235505342,2
+5,500,1243,"Compose(
+    RandomVerticalFlip(p=0.4)
+    RandomHorizontalFlip(p=0.4)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.199909806,3
+6,500,1243,"Compose(
+    RandomVerticalFlip(p=0.4)
+    RandomHorizontalFlip(p=0.4)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.186667204,4
+7,500,1243,"Compose(
+    RandomVerticalFlip(p=0.4)
+    RandomHorizontalFlip(p=0.4)
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.162411571,0
+8,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.11422348,0
+9,250,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.105439782,0
+10,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.043412089,0
+11,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,0.997533798,0
+12,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.249836326,0
+13,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+)",100,1.174496531,0
+14,250,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.073071003,0
+15,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.125443101,0
+16,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.05926156,0
+17,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,1.0064929723739624,0
+18,500,1243,"Compose(
+    RandomVerticalFlip(p=0.5)
+    RandomHorizontalFlip(p=0.5)
+    rotation_discrete()
+    GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.0))
+)",100,0.9760213494300842,0

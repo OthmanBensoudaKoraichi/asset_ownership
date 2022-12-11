@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 23 14:56:56 2022
-
-@author: nsuar
-"""
-
 import imageio
 import numpy as np
 import pandas as pd
@@ -71,7 +64,7 @@ def train_model_epoch(model,optimizer,loss_fun,data_aug,train_data,printing=Fals
     '''  
     #training loop
     batch_loss=0
-    model.train()
+    #model.train()
     for X,y in train_data:
         #sending data to device
         X_batch=data_aug(X).to('cuda')
@@ -117,7 +110,7 @@ def validation_loop(model,loss_fun,val_data,printing=False):
     '''      
     #validation loop
     val_loss=0
-    model.eval()
+    #model.eval()
     with torch.no_grad():
         for X,y in val_data:
             #sending data to device
@@ -300,28 +293,68 @@ def experiment_store(experiment,path_results,path_train,path_val):
     
     
     
-def test_set_rmse_and_save(model,loss_fun,test_set,params_path,test_set_in_path,test_set_out_path):
+def final_metrics_predict(model,mse,r2,train_set,batch_size,val_set,test_set,params_path,test_set_in_path,test_set_out_path,results_out_path):
     '''
-    Computing final RMSE in the test set for our best model. We also compute
+    Computing metrics for all sets for our best model. We also compute
     predictions on the test set, and store on a CSV file (to be used to visualize
     final predictions)
     inputs:
         -model: resnet model corresponding to our best experiment
-        -loss_fun: loss function
+        -mse: loss function
+        -r2: loss function
+        -train_set: a dataset subset to be passed to our dataloader
+        -batch_size: train data dataloader batch size
+        -val_set: a dataset subset to be passed to our dataloader
         -test_set: a dataset subset to be passed to our dataloader
         -params_path: path to our saved parameters (in .pt format)
         -test_set_in_path: path to CSV file containing our test set original data
         -test_set_out_path: path to CSV file to contain our original test set data,
                             but now with a row for our predictions
+        -results_out_path: path to store CSV with results
     '''
-    #test set dataloader
+    
+    #dataframe to store results
+    results=pd.DataFrame(index=["rmse","r2"],
+                          columns=["train","val","test"])
+        
+    #dataloaders
+    train_data= DataLoader( train_set , batch_size, shuffle = False)
+    val_data= DataLoader( val_set , len(val_set), shuffle = False)
     test_data= DataLoader( test_set , len(test_set), shuffle = False)
     
     #loading parameters    
     model.load_state_dict(torch.load(params_path))
+    #model.eval()
     
-    #making predictions and computing RMSE 
-    model.eval()
+    rmse_sum=0
+    r2_sum=0
+    
+    #train set metrics:
+    with torch.no_grad():
+        for X,y in train_data:
+            #sending data to device
+            X_batch=X.to('cuda')
+            y_batch=y.to('cuda')
+                    
+            pred = model(X_batch)
+            rmse_sum += torch.sqrt(mse(pred, y_batch)).item()
+            r2_sum += r2(pred,y_batch).item()
+    
+    results.loc["rmse"]["train"]= rmse_sum/len(iter(train_data))
+    results.loc["r2"]["train"]= r2_sum/len(iter(train_data))
+    
+    #validation set metrics:
+    with torch.no_grad():
+        for X,y in val_data:
+            #sending data to device
+            X_batch=X.to('cuda')
+            y_batch=y.to('cuda')
+                    
+            pred = model(X_batch)
+            results.loc["rmse"]["val"]= torch.sqrt(mse(pred, y_batch)).item()
+            results.loc["r2"]["val"]= r2(pred,y_batch).item()
+    
+    #test set metrics and prediction
     with torch.no_grad():
         for X,y in test_data:
             #sending data to device
@@ -329,14 +362,16 @@ def test_set_rmse_and_save(model,loss_fun,test_set,params_path,test_set_in_path,
             y_batch=y.to('cuda')
                     
             pred = model(X_batch)
-            loss = torch.sqrt(loss_fun(pred, y_batch))
-
+            results.loc["rmse"]["test"]= torch.sqrt(mse(pred, y_batch)).item()
+            results.loc["r2"]["test"]= r2(pred,y_batch).item()
+    
+    #storing results
+    results.to_csv(results_out_path,index=True)
+    
+    
     #reading CSV as pandas
     test_set_df=pd.read_csv(test_set_in_path)  
     #storing test set predictions in our test set dataframe
     test_set_df["pred"]=pred.cpu().numpy()
     #saving pandas as CSV
-    test_set_df.to_csv(test_set_out_path,index=False)
-    
-    
-    return loss.item()
+    test_set_df.to_csv(test_set_out_path,index=False)    
