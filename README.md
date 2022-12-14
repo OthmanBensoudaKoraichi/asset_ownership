@@ -1,6 +1,6 @@
 # Predicting asset ownership in Africa using satellite imagery
 
-
+Final project for Stanford's CS 299: Machine Learning class. For more details about this project, check out our [poster](/CS229_Poster.pdf).
 
 ## Code structure
 * `environment.yml` contains the environment we used to train our model.
